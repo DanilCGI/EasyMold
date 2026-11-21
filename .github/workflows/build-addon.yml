@@ -1,0 +1,30 @@
+name: Build Blender Addon
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build addon ZIP
+        uses: BlenderKit/blender-addon-build-action@v1
+        with:
+          name: "EasyMold"
+
+          build-location: "./"
+
+          exclude-files: ".git;.github;tests"
+
+      - name: Upload addon ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: blender-addon
+          path: ./*.zip
